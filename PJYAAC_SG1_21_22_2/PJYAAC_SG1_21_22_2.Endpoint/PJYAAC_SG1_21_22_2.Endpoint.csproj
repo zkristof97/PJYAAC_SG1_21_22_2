@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Data\PJYAAC_SG1_21_22_2.Data.csproj" />
     <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Logic\PJYAAC_SG1_21_22_2.Logic.csproj" />
     <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Models\PJYAAC_SG1_21_22_2.Models.csproj" />
   </ItemGroup>

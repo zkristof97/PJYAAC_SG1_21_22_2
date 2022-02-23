@@ -4,4 +4,18 @@
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Remove="BicycleAppDb.mdf" />
+    <None Remove="BicycleAppDb_log.ldf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="BicycleAppDb.mdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="BicycleAppDb_log.ldf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

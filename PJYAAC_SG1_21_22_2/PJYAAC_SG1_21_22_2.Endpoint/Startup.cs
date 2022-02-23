@@ -10,6 +10,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PJYAAC_SG1_21_22_2.Logic.Interfaces;
+using PJYAAC_SG1_21_22_2.Logic.Services;
+using PJYAAC_SG1_21_22_2.Repository.DbContexts;
+using PJYAAC_SG1_21_22_2.Repository.Interfaces;
+using PJYAAC_SG1_21_22_2.Repository.Repositories;
 
 namespace PJYAAC_SG1_21_22_2.Endpoint
 {
@@ -26,6 +31,10 @@ namespace PJYAAC_SG1_21_22_2.Endpoint
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
+            services.AddScoped(context => new BicycleAppDbContext());
+            services.AddScoped<IBicycleRepository, BicycleRepository>();
+            services.AddScoped<IBicycleLogic, BicycleLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

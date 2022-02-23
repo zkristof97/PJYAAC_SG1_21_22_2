@@ -1,7 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Models\PJYAAC_SG1_21_22_2.Models.csproj" />
+    <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Repository\PJYAAC_SG1_21_22_2.Repository.csproj" />
+  </ItemGroup>
 
 </Project>

@@ -7,4 +7,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\PJYAAC_SG1_21_22_2.Models\PJYAAC_SG1_21_22_2.Models.csproj" />
+  </ItemGroup>
+
 </Project>

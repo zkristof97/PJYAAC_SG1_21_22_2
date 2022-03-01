@@ -6,7 +6,57 @@
         xmlns:local="clr-namespace:PJYAAC_SG1_21_22_2.WpfClient"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
+    <Window.Resources>
+        <local:BicycleVM x:Key="VM" />
+    </Window.Resources>
+    <Grid DataContext="{StaticResource VM}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="15*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
 
+        <!--Table headers-->
+        <Label Grid.Row="0" FontWeight="Bold" Content="Típus" Grid.Column="0" />
+        <Label Grid.Row="0" FontWeight="Bold" Content="Modell" Grid.Column="1" />
+        <Label Grid.Row="0" FontWeight="Bold" Content="Szín" Grid.Column="2" />
+        <Label Grid.Row="0" FontWeight="Bold" Content="Vásárlás dátuma" ContentStringFormat="yyyy/mm/dd" Grid.Column="3"/>
+        <Label Grid.Row="0" FontWeight="Bold" Content="E-bike" Grid.Column="4"/>
+        <Label Grid.Row="0" FontWeight="Bold" Content="Összteleszkóp" Grid.Column="5"/>
+        
+        <ListBox ItemsSource="{Binding Bikes}"
+                 SelectedItem="{Binding Bicycle}" 
+                 HorizontalContentAlignment="Stretch"
+                 Grid.Row="1" 
+                 Grid.ColumnSpan="6">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
+                        </Grid.ColumnDefinitions>
+
+                        <Label Content="{Binding Type}" Grid.Column="0" />
+                        <Label Content="{Binding Model}" Grid.Column="1" />
+                        <Label Content="{Binding Color}" Grid.Column="2" />
+                        <Label Content="{Binding DateOfPurchase}" ContentStringFormat="yyyy/mm/dd" Grid.Column="3"/>
+                        <Label Content="{Binding IsElectric}" Grid.Column="4"/>
+                        <Label Content="{Binding IsFullSuspension}" Grid.Column="5"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Window>

@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PJYAAC_SG1_21_22_2.WpfClient"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Garázs" 
+        Height="450" 
+        Width="800"
+        Loaded="Window_Loaded">
     <Window.Resources>
         <local:BicycleVM x:Key="VM" />
     </Window.Resources>
@@ -13,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="1*" />
             <RowDefinition Height="15*" />
+            <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -52,8 +56,8 @@
                         <Label Content="{Binding Model}" Grid.Column="1" />
                         <Label Content="{Binding Color}" Grid.Column="2" />
                         <Label Content="{Binding DateOfPurchase}" ContentStringFormat="yyyy/mm/dd" Grid.Column="3"/>
-                        <Label Content="{Binding IsElectric}" Grid.Column="4"/>
-                        <Label Content="{Binding IsFullSuspension}" Grid.Column="5"/>
+                        <CheckBox IsChecked="{Binding IsElectric}" IsEnabled="False" Grid.Column="4"/>
+                        <CheckBox IsChecked="{Binding IsFullSuspension}" IsEnabled="False" Grid.Column="5"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

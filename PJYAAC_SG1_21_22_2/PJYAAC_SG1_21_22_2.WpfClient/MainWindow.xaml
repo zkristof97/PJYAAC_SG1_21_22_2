@@ -62,5 +62,22 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="6" Margin="2">
+            <Button Content="Létrehozás" 
+                    Background="LightGreen" 
+                    Margin="5" 
+                    Click="CreateClicked"/>
+            <Button Content="Szerkesztés" 
+                    Background="LightYellow" 
+                    Margin="5" 
+                    IsEnabled="{Binding Bicycle, TargetNullValue=false}"
+                    Click="EditClicked"/>
+            <Button Content="Törlés" 
+                    Background="IndianRed" 
+                    Margin="5" 
+                    IsEnabled="{Binding Bicycle, TargetNullValue=false}"
+                    Click="DeleteClicked"/>
+        </StackPanel>
     </Grid>
 </Window>

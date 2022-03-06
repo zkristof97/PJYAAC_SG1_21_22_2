@@ -1,4 +1,5 @@
 ﻿using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
+using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure;
 using PJYAAC_SG1_21_22_2.WpfClient.Models;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
     public class BicycleHandlerService : IBicycleHandlerService
     {
         private readonly IBicycleEditorService _bicycleEditorService;
+        private readonly HttpService _httpService;
 
         public BicycleHandlerService(IBicycleEditorService bicycleEditorService)
         {
             _bicycleEditorService = bicycleEditorService;
+            _httpService = new HttpService("Bicycle", "http://localhost:56411/api/");
         }
 
         public void AddBicycle(IList<BicycleModel> collection)
@@ -49,6 +52,11 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
                 bicycle.Type = editedBike.Type;
                 bicycle.Model = editedBike.Model;
             }
+        }
+
+        public IEnumerable<BicycleModel> GetAll()
+        {
+            return _httpService.GetAll<BicycleModel>();
         }
     }
 }

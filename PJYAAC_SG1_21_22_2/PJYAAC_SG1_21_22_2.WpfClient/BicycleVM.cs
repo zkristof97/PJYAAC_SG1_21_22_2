@@ -41,7 +41,6 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
         public BicycleVM(IBicycleHandlerService bicycleHandlerService)
         {
             _bicycleHandlerService = bicycleHandlerService;
-            Bikes = new ObservableCollection<BicycleModel>();
 
             if (IsInDesignMode)
             {
@@ -79,8 +78,11 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
                 Bikes.Add(bike1);
                 Bikes.Add(bike2);
                 Bikes.Add(bike3);
-
+                
                 Bicycle = bike2;
+            } else
+            {
+                Bikes = new ObservableCollection<BicycleModel>(_bicycleHandlerService.GetAll());
             }
 
             AddCommand = new RelayCommand(() => _bicycleHandlerService.AddBicycle(Bikes), true);

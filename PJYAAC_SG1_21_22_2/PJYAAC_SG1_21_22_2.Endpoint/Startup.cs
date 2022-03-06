@@ -45,8 +45,7 @@ namespace PJYAAC_SG1_21_22_2.Endpoint
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-
+            
             app.UseRouting();
 
             app.UseAuthorization();

@@ -1,20 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace PJYAAC_SG1_21_22_2.WpfClient
 {
@@ -32,15 +16,37 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
 
         private void CreateClicked(object sender, RoutedEventArgs e)
         {
+            var createWindow = new CreateEditBicycleWindow(null);
+            createWindow.Owner = this;
+
+            if (createWindow.ShowDialog() == true)
+            {
+                vm.Bikes.Add(createWindow.Bicycle);
+            }
         }
 
         private void EditClicked(object sender, RoutedEventArgs e)
         {
+            var editWindow = new CreateEditBicycleWindow(vm.Bicycle);
+            editWindow.Owner = this;
+
+            var editResult = editWindow.ShowDialog();
+
+            if (editResult == true)
+            {
+                vm.Bicycle.DateOfPurchase = editWindow.Bicycle.DateOfPurchase;
+                vm.Bicycle.Price = editWindow.Bicycle.Price;
+                vm.Bicycle.IsFullSuspension = editWindow.Bicycle.IsFullSuspension;
+                vm.Bicycle.IsElectric = editWindow.Bicycle.IsElectric;
+                vm.Bicycle.Color = editWindow.Bicycle.Color;
+                vm.Bicycle.Type = editWindow.Bicycle.Type;
+                vm.Bicycle.Model = editWindow.Bicycle.Model;
+            }
         }
 
         private void DeleteClicked(object sender, RoutedEventArgs e)
         {
-
+            vm.Bikes.Remove(vm.Bicycle);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

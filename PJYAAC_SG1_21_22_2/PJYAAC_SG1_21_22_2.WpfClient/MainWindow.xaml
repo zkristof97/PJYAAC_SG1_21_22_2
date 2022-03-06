@@ -7,8 +7,7 @@
         mc:Ignorable="d"
         Title="Garázs" 
         Height="450" 
-        Width="800"
-        Loaded="Window_Loaded">
+        Width="800">
     <Window.Resources>
         <local:BicycleVM x:Key="VM" />
     </Window.Resources>
@@ -67,17 +66,17 @@
             <Button Content="Létrehozás" 
                     Background="LightGreen" 
                     Margin="5" 
-                    Click="CreateClicked"/>
+                    Command="{Binding AddCommand}"/>
             <Button Content="Szerkesztés" 
                     Background="LightYellow" 
                     Margin="5" 
                     IsEnabled="{Binding Bicycle, TargetNullValue=false}"
-                    Click="EditClicked"/>
+                    Command="{Binding EditCommand}"/>
             <Button Content="Törlés" 
                     Background="IndianRed" 
                     Margin="5" 
                     IsEnabled="{Binding Bicycle, TargetNullValue=false}"
-                    Click="DeleteClicked"/>
+                    Command="{Binding DeleteCommand}"/>
         </StackPanel>
     </Grid>
 </Window>

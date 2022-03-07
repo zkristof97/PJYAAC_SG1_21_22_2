@@ -76,7 +76,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.Models
 
         public BicycleModel()
         {
-
+            DateOfPurchase = DateTime.Today;
         }
 
         public BicycleModel(int id, DateTime dateOfPurchase, int price, bool isFullSuspension, bool isElectric, string color, string type, string model)

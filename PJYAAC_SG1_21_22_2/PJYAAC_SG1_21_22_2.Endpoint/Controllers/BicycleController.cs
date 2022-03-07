@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PJYAAC_SG1_21_22_2.Logic.Interfaces;
 using PJYAAC_SG1_21_22_2.Models.Entities;
+using PJYAAC_SG1_21_22_2.Models.Models;
 
 namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
 {
@@ -35,9 +36,9 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
         // POST api/Car/Create
         [HttpPost]
         [ActionName("Create")]
-        public IActionResult Post(Bicycle bicycle)
+        public ApiResult Post(Bicycle bicycle)
         {
-            //var result = new ActionResult(true);
+            var result = new ApiResult(true);
 
             try
             {
@@ -45,18 +46,18 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             }
             catch (Exception)
             {
-                // result.IsSuccess = false;
+                result.IsSuccess = false;
             }
 
-            return Ok();
+            return result;
         }
 
         // PUT api/Car/Update
         [HttpPut]
         [ActionName("Update")]
-        public IActionResult Put(Bicycle bicycle)
+        public ApiResult Put(Bicycle bicycle)
         {
-            //var result = new ApiResult(true);
+            var result = new ApiResult(true);
 
             try
             {
@@ -64,17 +65,17 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             }
             catch (Exception)
             {
-                //result.IsSuccess = false;
+                result.IsSuccess = false;
             }
 
-            return Ok();
+            return result;
         }
 
         // DELETE api/Car/Delete/5
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public ApiResult Delete(int id)
         {
-            //var result = new ApiResult(true);
+            var result = new ApiResult(true);
 
             try
             {
@@ -82,10 +83,10 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             }
             catch (Exception)
             {
-                //result.IsSuccess = false;
+                result.IsSuccess = false;
             }
 
-            return Ok();
+            return result;
         }
     }
 }

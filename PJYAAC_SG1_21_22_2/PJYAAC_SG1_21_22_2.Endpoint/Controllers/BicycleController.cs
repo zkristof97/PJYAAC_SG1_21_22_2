@@ -18,7 +18,7 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             this.bicycleLogic = bicycleLogic;
         }
 
-        // GET: api/Car/GetAll
+        // GET: api/Bicycle/GetAll
         [HttpGet]
         [ActionName("GetAll")]
         public IEnumerable<Bicycle> Get()
@@ -26,14 +26,14 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             return bicycleLogic.ReadAll();
         }
 
-        // GET api/Car/Get/5
+        // GET api/Bicycle/Get/5
         [HttpGet("{id}")]
         public Bicycle Get(int id)
         {
             return bicycleLogic.Read(id);
         }
 
-        // POST api/Car/Create
+        // POST api/Bicycle/Create
         [HttpPost]
         [ActionName("Create")]
         public ApiResult Post(Bicycle bicycle)
@@ -52,7 +52,7 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             return result;
         }
 
-        // PUT api/Car/Update
+        // PUT api/Bicycle/Update
         [HttpPut]
         [ActionName("Update")]
         public ApiResult Put(Bicycle bicycle)
@@ -71,7 +71,7 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             return result;
         }
 
-        // DELETE api/Car/Delete/5
+        // DELETE api/Bicycle/Delete/5
         [HttpDelete("{id}")]
         public ApiResult Delete(int id)
         {

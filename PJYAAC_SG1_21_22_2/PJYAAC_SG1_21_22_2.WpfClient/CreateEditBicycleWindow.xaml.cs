@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using PJYAAC_SG1_21_22_2.WpfClient.Models;
+using PJYAAC_SG1_21_22_2.WpfClient.ViewModels;
 
 namespace PJYAAC_SG1_21_22_2.WpfClient
 {
@@ -20,6 +21,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
     /// </summary>
     public partial class CreateEditBicycleWindow : Window
     {
+        private BicycleEditVM vm;
         public BicycleModel Bicycle { get; private set; }
         
         public CreateEditBicycleWindow(BicycleModel? bicycle)
@@ -27,8 +29,6 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
             InitializeComponent();
 
             Bicycle = bicycle != null ? (BicycleModel)bicycle.Clone() : new BicycleModel();
-
-            DataContext = Bicycle;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -39,6 +39,12 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;
+        }
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            vm = (BicycleEditVM)Resources["VM"];
+            vm.EditableBicycle = Bicycle;
         }
     }
 }

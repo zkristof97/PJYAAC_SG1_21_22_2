@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace PJYAAC_SG1_21_22_2.WpfClient
+namespace PJYAAC_SG1_21_22_2.WpfClient.ViewModels
 {
     public class BicycleVM : ViewModelBase
     {

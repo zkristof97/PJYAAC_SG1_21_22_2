@@ -1,5 +1,6 @@
 ﻿using _04LayeredCRUD.Infrastructure;
 using CommonServiceLocator;
+using GalaSoft.MvvmLight.Messaging;
 using PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation;
 using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
 using System;
@@ -23,6 +24,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
 
             SimpleIocAsServiceLocator.Instance.Register<IBicycleHandlerService, BicycleHandlerService>();
             SimpleIocAsServiceLocator.Instance.Register<IBicycleEditorService, BicycleEditorService>();
+            SimpleIocAsServiceLocator.Instance.Register(() => Messenger.Default);
         }
     }
 }

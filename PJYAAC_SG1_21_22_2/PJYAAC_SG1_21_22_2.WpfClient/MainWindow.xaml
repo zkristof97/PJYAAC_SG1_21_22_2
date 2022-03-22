@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ViewModels="clr-namespace:PJYAAC_SG1_21_22_2.WpfClient.ViewModels"
         mc:Ignorable="d"
+        Loaded="WindowLoaded"
+        Closing="WindowClosing"
         Title="Garázs" 
         Height="450" 
         Width="800">

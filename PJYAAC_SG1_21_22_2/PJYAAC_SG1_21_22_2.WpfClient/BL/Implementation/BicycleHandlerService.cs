@@ -1,4 +1,5 @@
-﻿using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
+﻿using GalaSoft.MvvmLight.Messaging;
+using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
 using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure;
 using PJYAAC_SG1_21_22_2.WpfClient.Models;
 using System;
@@ -12,12 +13,14 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
     public class BicycleHandlerService : IBicycleHandlerService
     {
         private readonly IBicycleEditorService _bicycleEditorService;
+        private readonly IMessenger _messenger;
         private readonly HttpService _httpService;
 
-        public BicycleHandlerService(IBicycleEditorService bicycleEditorService)
+        public BicycleHandlerService(IBicycleEditorService bicycleEditorService, IMessenger messenger)
         {
             _bicycleEditorService = bicycleEditorService;
             _httpService = new HttpService("Bicycle", "http://localhost:56411/api/");
+            _messenger = messenger;
         }
 
         public void AddBicycle(IList<BicycleModel> collection)
@@ -35,6 +38,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
             if(bicycle != null && _httpService.Delete(bicycle.Id).IsSuccess)
             {
                 collection.Remove(bicycle);
+                SendMessage("Törölve!");
             }
         }
 
@@ -64,6 +68,11 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
             var detailsWindow = new CreateEditBicycleWindow(bicycle, false);
 
             detailsWindow.ShowDialog();
+        }
+
+        private void SendMessage(params string[] messages)
+        {
+            _messenger.Send(messages, "OperationResult");
         }
     }
 }

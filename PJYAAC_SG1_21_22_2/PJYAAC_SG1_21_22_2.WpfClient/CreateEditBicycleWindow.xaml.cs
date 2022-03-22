@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,13 +23,15 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
     public partial class CreateEditBicycleWindow : Window
     {
         private BicycleEditVM vm;
+        private bool isEnabled;
         public BicycleModel Bicycle { get; private set; }
         
-        public CreateEditBicycleWindow(BicycleModel? bicycle)
+        public CreateEditBicycleWindow(BicycleModel? bicycle, bool isEnabled = true)
         {
             InitializeComponent();
 
             Bicycle = bicycle != null ? (BicycleModel)bicycle.Clone() : new BicycleModel();
+            this.isEnabled = isEnabled;
         }
 
         private void OkButton_Click(object sender, RoutedEventArgs e)
@@ -45,6 +48,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
         {
             vm = (BicycleEditVM)Resources["VM"];
             vm.EditableBicycle = Bicycle;
+            vm.IsEnabled = isEnabled;
         }
     }
 }

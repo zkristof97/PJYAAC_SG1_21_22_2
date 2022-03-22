@@ -18,5 +18,12 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.ViewModels
             set { Set(ref editableBicycle, value); }
         }
 
+        private bool isEnabled;
+
+        public bool IsEnabled
+        {
+            get { return isEnabled; }
+            set { Set(ref isEnabled, value); }
+        }
     }
 }

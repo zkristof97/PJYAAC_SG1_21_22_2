@@ -26,13 +26,13 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
 
             if(createdBike != null && _httpService.Create(createdBike).IsSuccess)
             {
-                collection.Add(createdBike);
+                collection.Add(_httpService.Create(createdBike).Content);
             }
         }
 
         public void DeleteBicycle(IList<BicycleModel> collection, BicycleModel bicycle)
         {
-            if(bicycle != null && _httpService.Delete(bicycle).IsSuccess)
+            if(bicycle != null && _httpService.Delete(bicycle.Id).IsSuccess)
             {
                 collection.Remove(bicycle);
             }
@@ -42,7 +42,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
         {
             var editedBike = _bicycleEditorService.EditBicycle(bicycle);
 
-            if(editedBike != null && _httpService.Update(editedBike).IsSuccess)
+            if (editedBike != null && _httpService.Update(editedBike).IsSuccess)
             {
                 bicycle.DateOfPurchase = editedBike.DateOfPurchase;
                 bicycle.Price = editedBike.Price;
@@ -57,6 +57,13 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
         public IEnumerable<BicycleModel> GetAll()
         {
             return _httpService.GetAll<BicycleModel>();
+        }
+
+        public void ViewDetails(BicycleModel bicycle)
+        {
+            var detailsWindow = new CreateEditBicycleWindow(bicycle, false);
+
+            detailsWindow.ShowDialog();
         }
     }
 }

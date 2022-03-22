@@ -67,11 +67,15 @@
                     Background="LightGreen" 
                     Margin="5" 
                     Command="{Binding AddCommand}"/>
-            <Button Content="Szerkesztés" 
+            <Button Content="Módosítás" 
                     Background="LightYellow" 
                     Margin="5" 
                     IsEnabled="{Binding Bicycle, TargetNullValue=false}"
                     Command="{Binding EditCommand}"/>
+            <Button Content="Adatlap megtekintése" 
+                    Margin="5" 
+                    IsEnabled="{Binding Bicycle, TargetNullValue=false}"
+                    Command="{Binding ViewDetailsCommand}"/>
             <Button Content="Törlés" 
                     Background="IndianRed" 
                     Margin="5" 

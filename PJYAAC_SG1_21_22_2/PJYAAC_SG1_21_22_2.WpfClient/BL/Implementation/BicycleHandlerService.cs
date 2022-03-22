@@ -13,12 +13,14 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
     public class BicycleHandlerService : IBicycleHandlerService
     {
         private readonly IBicycleEditorService _bicycleEditorService;
+        private readonly IBicycleDisplayService _bicycleDisplayService;
         private readonly IMessenger _messenger;
         private readonly HttpService _httpService;
 
-        public BicycleHandlerService(IBicycleEditorService bicycleEditorService, IMessenger messenger)
+        public BicycleHandlerService(IBicycleEditorService bicycleEditorService, IMessenger messenger, IBicycleDisplayService bicycleDisplayService)
         {
             _bicycleEditorService = bicycleEditorService;
+            _bicycleDisplayService = bicycleDisplayService;
             _httpService = new HttpService("Bicycle", "http://localhost:56411/api/");
             _messenger = messenger;
         }
@@ -85,9 +87,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
 
         public void ViewDetails(BicycleModel bicycle)
         {
-            var detailsWindow = new CreateEditBicycleWindow(bicycle, false);
-
-            detailsWindow.ShowDialog();
+            _bicycleDisplayService.Display(bicycle);
         }
 
         private void SendMessage(params string[] messages)

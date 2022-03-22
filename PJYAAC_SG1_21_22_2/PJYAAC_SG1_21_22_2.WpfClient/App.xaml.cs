@@ -24,6 +24,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
 
             SimpleIocAsServiceLocator.Instance.Register<IBicycleHandlerService, BicycleHandlerService>();
             SimpleIocAsServiceLocator.Instance.Register<IBicycleEditorService, BicycleEditorService>();
+            SimpleIocAsServiceLocator.Instance.Register<IBicycleDisplayService, BicycleDisplayService>();
             SimpleIocAsServiceLocator.Instance.Register(() => Messenger.Default);
         }
     }

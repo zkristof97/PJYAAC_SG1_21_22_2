@@ -26,21 +26,23 @@
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
         <!--Table headers-->
         <Label Grid.Row="0" FontWeight="Bold" Content="Típus" Grid.Column="0" />
         <Label Grid.Row="0" FontWeight="Bold" Content="Modell" Grid.Column="1" />
         <Label Grid.Row="0" FontWeight="Bold" Content="Szín" Grid.Column="2" />
-        <Label Grid.Row="0" FontWeight="Bold" Content="Vásárlás dátuma" ContentStringFormat="yyyy/mm/dd" Grid.Column="3"/>
-        <Label Grid.Row="0" FontWeight="Bold" Content="E-bike" Grid.Column="4"/>
-        <Label Grid.Row="0" FontWeight="Bold" Content="Összteleszkóp" Grid.Column="5"/>
+        <Label Grid.Row="0" FontWeight="Bold" Content="Ár" Grid.Column="3" />
+        <Label Grid.Row="0" FontWeight="Bold" Content="Vásárlás dátuma" Grid.Column="4"/>
+        <Label Grid.Row="0" FontWeight="Bold" Content="E-bike" Grid.Column="5"/>
+        <Label Grid.Row="0" FontWeight="Bold" Content="Összteleszkóp" Grid.Column="6"/>
         
         <ListBox ItemsSource="{Binding Bikes}"
                  SelectedItem="{Binding Bicycle}" 
                  HorizontalContentAlignment="Stretch"
                  Grid.Row="1" 
-                 Grid.ColumnSpan="6">
+                 Grid.ColumnSpan="7">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid VerticalAlignment="Center">
@@ -51,20 +53,22 @@
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="1*" />
                             <ColumnDefinition Width="1*" />
+                            <ColumnDefinition Width="1*" />
                         </Grid.ColumnDefinitions>
 
-                        <Label Content="{Binding Type}" Grid.Column="0" />
-                        <Label Content="{Binding Model}" Grid.Column="1" />
-                        <Label Content="{Binding Color}" Grid.Column="2" />
-                        <Label Content="{Binding DateOfPurchase}" ContentStringFormat="yyyy/mm/dd" Grid.Column="3"/>
-                        <CheckBox IsChecked="{Binding IsElectric}" IsEnabled="False" Grid.Column="4"/>
-                        <CheckBox IsChecked="{Binding IsFullSuspension}" IsEnabled="False" Grid.Column="5"/>
+                        <TextBlock Text="{Binding Type}" Grid.Column="0" />
+                        <TextBlock Text="{Binding Model}" Grid.Column="1" />
+                        <TextBlock Text="{Binding Color}" Grid.Column="2" />
+                        <TextBlock Text="{Binding Price, StringFormat={}{0}Ft}" Grid.Column="3" />
+                        <TextBlock Text="{Binding DateOfPurchase, StringFormat=d}" Grid.Column="4"/>
+                        <CheckBox IsChecked="{Binding IsElectric}" IsEnabled="False" Grid.Column="5"/>
+                        <CheckBox IsChecked="{Binding IsFullSuspension}" IsEnabled="False" Grid.Column="6"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="6" Margin="2">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Grid.Row="2" Grid.ColumnSpan="7" Margin="2">
             <Button Content="Létrehozás" 
                     Background="LightGreen" 
                     Margin="5" 

@@ -1,6 +1,7 @@
 ﻿using GalaSoft.MvvmLight.Messaging;
 using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
 using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure;
+using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure.Interfaces;
 using PJYAAC_SG1_21_22_2.WpfClient.Models;
 using System;
 using System.Collections.Generic;
@@ -15,13 +16,16 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
         private readonly IBicycleEditorService _bicycleEditorService;
         private readonly IBicycleDisplayService _bicycleDisplayService;
         private readonly IMessenger _messenger;
-        private readonly HttpService _httpService;
+        private readonly IHttpService _httpService;
 
-        public BicycleHandlerService(IBicycleEditorService bicycleEditorService, IMessenger messenger, IBicycleDisplayService bicycleDisplayService)
+        public BicycleHandlerService(IBicycleEditorService bicycleEditorService
+            , IMessenger messenger
+            , IBicycleDisplayService bicycleDisplayService
+            , IHttpService httpService)
         {
             _bicycleEditorService = bicycleEditorService;
             _bicycleDisplayService = bicycleDisplayService;
-            _httpService = new HttpService("Bicycle", "http://localhost:56411/api/");
+            _httpService = httpService;
             _messenger = messenger;
         }
 

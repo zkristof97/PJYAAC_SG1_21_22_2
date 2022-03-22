@@ -1,4 +1,5 @@
 ﻿using PJYAAC_SG1_21_22_2.Models.Models;
+using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -7,7 +8,7 @@ using System.Text.Json;
 
 namespace PJYAAC_SG1_21_22_2.WpfClient.Infrastructure
 {
-    public class HttpService
+    public class HttpService : IHttpService
     {
         string controllerName;
 

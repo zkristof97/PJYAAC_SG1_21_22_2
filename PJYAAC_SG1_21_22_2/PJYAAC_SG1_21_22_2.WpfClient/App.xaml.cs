@@ -3,6 +3,8 @@ using CommonServiceLocator;
 using GalaSoft.MvvmLight.Messaging;
 using PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation;
 using PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces;
+using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure;
+using PJYAAC_SG1_21_22_2.WpfClient.Infrastructure.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -26,6 +28,12 @@ namespace PJYAAC_SG1_21_22_2.WpfClient
             SimpleIocAsServiceLocator.Instance.Register<IBicycleEditorService, BicycleEditorService>();
             SimpleIocAsServiceLocator.Instance.Register<IBicycleDisplayService, BicycleDisplayService>();
             SimpleIocAsServiceLocator.Instance.Register(() => Messenger.Default);
+            SimpleIocAsServiceLocator.Instance.Register(() => createHttpServiceInstance("Bicycle", "http://localhost:56411/api/"));
+        }
+
+        private IHttpService createHttpServiceInstance(string controllerName, string baseAddress)
+        {
+            return new HttpService(controllerName, baseAddress);
         }
     }
 }

@@ -11,15 +11,10 @@ namespace PJYAAC_SG1_21_22_2.Models.Models
         public bool IsSuccess { get; set; }
         public List<string> ExceptionMessages { get; set; }
 
-        // messages
-
-        public ApiResult()
-        {
-        }
-
         public ApiResult(bool isSuccess)
         {
             IsSuccess = isSuccess;
+            ExceptionMessages = new List<string>();
         }
     }
 }

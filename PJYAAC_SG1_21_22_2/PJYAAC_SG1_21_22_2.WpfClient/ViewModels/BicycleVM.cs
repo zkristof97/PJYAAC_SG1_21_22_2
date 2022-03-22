@@ -87,7 +87,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.ViewModels
             }
 
             AddCommand = new RelayCommand(() => _bicycleHandlerService.AddBicycle(Bikes), true);
-            EditCommand = new RelayCommand(() => _bicycleHandlerService.EditBicycle(Bicycle), true);
+            EditCommand = new RelayCommand(() => _bicycleHandlerService.EditBicycle(Bikes, Bicycle), true);
             DeleteCommand = new RelayCommand(() => _bicycleHandlerService.DeleteBicycle(Bikes, Bicycle), true);
             ViewDetailsCommand = new RelayCommand(() => _bicycleHandlerService.ViewDetails(Bicycle));
         }

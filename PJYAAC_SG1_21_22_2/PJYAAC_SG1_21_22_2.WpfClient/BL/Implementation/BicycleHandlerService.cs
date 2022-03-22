@@ -27,35 +27,55 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
         {
             var createdBike = _bicycleEditorService.EditBicycle(null);
 
-            if(createdBike != null && _httpService.Create(createdBike).IsSuccess)
+            if(createdBike != null)
             {
-                collection.Add(_httpService.Create(createdBike).Content);
+                var createResult = _httpService.Create(createdBike);
+
+                if (createResult.IsSuccess)
+                {
+                    RefreshCollectionFromServer(collection);
+                    SendMessage("Létrehozás sikeresen megtörtént.");
+                } else
+                {
+                    SendMessage(createResult.ExceptionMessages.ToArray());
+                }
             }
         }
 
         public void DeleteBicycle(IList<BicycleModel> collection, BicycleModel bicycle)
         {
-            if(bicycle != null && _httpService.Delete(bicycle.Id).IsSuccess)
+            if(bicycle != null)
             {
-                collection.Remove(bicycle);
-                SendMessage("Törölve!");
+                var deleteResult = _httpService.Delete(bicycle.Id);
+
+                if(deleteResult.IsSuccess)
+                {
+                    RefreshCollectionFromServer(collection);
+                    SendMessage("Törölve!");
+                } else
+                {
+                    SendMessage(deleteResult.ExceptionMessages.ToArray());
+                }
             }
         }
 
-        public void EditBicycle(BicycleModel bicycle)
+        public void EditBicycle(IList<BicycleModel> collection, BicycleModel bicycle)
         {
             var editedBike = _bicycleEditorService.EditBicycle(bicycle);
-
-            if (editedBike != null && _httpService.Update(editedBike).IsSuccess)
+            
+            if (editedBike != null)
             {
-                bicycle.DateOfPurchase = editedBike.DateOfPurchase;
-                bicycle.Price = editedBike.Price;
-                bicycle.IsFullSuspension = editedBike.IsFullSuspension;
-                bicycle.IsElectric = editedBike.IsElectric;
-                bicycle.Color = editedBike.Color;
-                bicycle.Type = editedBike.Type;
-                bicycle.Model = editedBike.Model;
-            }
+                var updateResult = _httpService.Update(editedBike);
+
+                if (updateResult.IsSuccess)
+                {
+                    RefreshCollectionFromServer(collection);
+                    SendMessage("Változtatások mentve.");
+                } else
+                {
+                    SendMessage(updateResult.ExceptionMessages.ToArray());
+                }
+            } 
         }
 
         public IEnumerable<BicycleModel> GetAll()
@@ -73,6 +93,17 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
         private void SendMessage(params string[] messages)
         {
             _messenger.Send(messages, "OperationResult");
+        }
+
+        private void RefreshCollectionFromServer(IList<BicycleModel> collection)
+        {
+            collection.Clear();
+            var newBicycles = GetAll();
+
+            foreach (var bicycle in newBicycles)
+            {
+                collection.Add(bicycle);
+            }
         }
     }
 }

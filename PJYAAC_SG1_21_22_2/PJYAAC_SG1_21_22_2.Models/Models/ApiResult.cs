@@ -9,6 +9,7 @@ namespace PJYAAC_SG1_21_22_2.Models.Models
     public class ApiResult
     {
         public bool IsSuccess { get; set; }
+        public List<string> ExceptionMessages { get; set; }
 
         // messages
 

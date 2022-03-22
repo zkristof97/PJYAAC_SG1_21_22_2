@@ -10,7 +10,7 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Interfaces
     public interface IBicycleHandlerService
     {
         void AddBicycle(IList<BicycleModel> collection);
-        void EditBicycle(BicycleModel bicycle);
+        void EditBicycle(IList<BicycleModel> collection, BicycleModel bicycle);
         void DeleteBicycle(IList<BicycleModel> collection, BicycleModel bicycle);
         void ViewDetails(BicycleModel bicycle);
 

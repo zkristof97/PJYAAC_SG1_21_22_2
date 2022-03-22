@@ -44,9 +44,10 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             {
                 bicycleLogic.Create(bicycle);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.IsSuccess = false;
+                result.ExceptionMessages = new List<string>() { e.Message };
             }
 
             return result;
@@ -63,9 +64,10 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             {
                 bicycleLogic.Update(bicycle);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.IsSuccess = false;
+                result.ExceptionMessages = new List<string>() { e.Message };
             }
 
             return result;
@@ -81,9 +83,10 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
             {
                 bicycleLogic.Delete(id);
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 result.IsSuccess = false;
+                result.ExceptionMessages = new List<string>() { e.Message };
             }
 
             return result;

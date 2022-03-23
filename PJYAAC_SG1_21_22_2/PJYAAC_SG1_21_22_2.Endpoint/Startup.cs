@@ -35,6 +35,11 @@ namespace PJYAAC_SG1_21_22_2.Endpoint
             services.AddScoped(context => new BicycleAppDbContext());
             services.AddScoped<IBicycleRepository, BicycleRepository>();
             services.AddScoped<IBicycleLogic, BicycleLogic>();
+
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.SuppressModelStateInvalidFilter = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

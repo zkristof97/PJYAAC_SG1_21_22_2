@@ -23,7 +23,7 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
         {
             var allBikes = ReadAll();
 
-            var existingBike = allBikes.FirstOrDefault((bicycle) => bicycle.Model == entity.Model);
+            var existingBike = allBikes.FirstOrDefault((bicycle) => bicycle.Model.ToLower() == entity.Model.ToLower());
 
             return existingBike;
         }

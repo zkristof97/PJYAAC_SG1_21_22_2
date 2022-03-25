@@ -49,7 +49,7 @@ namespace PJYAAC_SG1_21_22_2.Repository.DbContexts
                 , DateOfPurchase = DateTime.Now
                 , IsElectric = true
                 , IsFullSuspension = true
-                , Model = "Cube"
+                , Model = "Santa Cruz"
                 , Price = 800000
                 , Type = "Mountain Bike"
             };
@@ -60,7 +60,7 @@ namespace PJYAAC_SG1_21_22_2.Repository.DbContexts
                 , DateOfPurchase = DateTime.Now
                 , IsElectric = false
                 , IsFullSuspension = true
-                , Model = "Cube"
+                , Model = "Giant"
                 , Price = 400000
                 , Type = "Road bike"
             };

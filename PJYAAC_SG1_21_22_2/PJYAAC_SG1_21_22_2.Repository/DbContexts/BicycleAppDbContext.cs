@@ -13,6 +13,7 @@ namespace PJYAAC_SG1_21_22_2.Repository.DbContexts
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder
+                .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .UseLazyLoadingProxies()
                 .UseSqlServer(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\BicycleAppDb.mdf;Integrated Security=true;MultipleActiveResultSets=True");
         }

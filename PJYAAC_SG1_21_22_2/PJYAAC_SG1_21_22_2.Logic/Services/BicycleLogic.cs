@@ -29,7 +29,6 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
 
             if(existingBike != null)
             {
-                _dbContext.Entry(existingBike).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
                 return existingBike.Id;
             }
 

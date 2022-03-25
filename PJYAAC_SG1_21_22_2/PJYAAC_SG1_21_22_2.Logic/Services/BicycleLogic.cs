@@ -13,12 +13,10 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
     public class BicycleLogic : IBicycleLogic
     {
         private readonly IBicycleRepository _bicycleRepository;
-        private readonly BicycleAppDbContext _dbContext;
 
-        public BicycleLogic(IBicycleRepository bicycleRepository, BicycleAppDbContext dbContext)
+        public BicycleLogic(IBicycleRepository bicycleRepository)
         {
             _bicycleRepository = bicycleRepository;
-            _dbContext = dbContext;
         }
 
         private int BicycleIdWithSameModel(Bicycle entity)

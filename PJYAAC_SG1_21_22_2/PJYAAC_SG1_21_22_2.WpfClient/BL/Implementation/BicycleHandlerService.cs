@@ -31,21 +31,33 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
 
         public void AddBicycle(IList<BicycleModel> collection)
         {
-            var createdBike = _bicycleEditorService.EditBicycle(null);
+            bool isOperationFinished = false;
+            BicycleModel bicycleToCreate = null;
 
-            if(createdBike != null)
+            do
             {
-                var createResult = _httpService.Create(createdBike);
+                var createdBike = _bicycleEditorService.EditBicycle(bicycleToCreate);
 
-                if (createResult.IsSuccess)
+                if (createdBike != null)
                 {
-                    RefreshCollectionFromServer(collection);
-                    SendMessage("Létrehozás sikeresen megtörtént.");
+                    var createResult = _httpService.Create(createdBike);
+
+                    bicycleToCreate = createdBike;
+                    if (createResult.IsSuccess)
+                    {
+                        isOperationFinished = true;
+                        RefreshCollectionFromServer(collection);
+                        SendMessage("Létrehozás sikeresen megtörtént.");
+                    } else
+                    {
+                        SendMessage(createResult.ExceptionMessages.ToArray());
+                    }
                 } else
                 {
-                    SendMessage(createResult.ExceptionMessages.ToArray());
+                    isOperationFinished = true;
+                    SendMessage("Létrehozás megszakítva.");
                 }
-            }
+            } while (!isOperationFinished);
         }
 
         public void DeleteBicycle(IList<BicycleModel> collection, BicycleModel bicycle)
@@ -67,21 +79,33 @@ namespace PJYAAC_SG1_21_22_2.WpfClient.BL.Implementation
 
         public void EditBicycle(IList<BicycleModel> collection, BicycleModel bicycle)
         {
-            var editedBike = _bicycleEditorService.EditBicycle(bicycle);
-            
-            if (editedBike != null)
-            {
-                var updateResult = _httpService.Update(editedBike);
+            bool isOperationFinished = false;
+            BicycleModel bicycleToEdit = bicycle;
 
-                if (updateResult.IsSuccess)
+            do
+            {
+                var editedBike = _bicycleEditorService.EditBicycle(bicycleToEdit);
+            
+                if (editedBike != null)
                 {
-                    RefreshCollectionFromServer(collection);
-                    SendMessage("Változtatások mentve.");
+                    var updateResult = _httpService.Update(editedBike);
+
+                    bicycleToEdit = editedBike;
+                    if (updateResult.IsSuccess)
+                    {
+                        isOperationFinished = true;
+                        RefreshCollectionFromServer(collection);
+                        SendMessage("Változtatások mentve.");
+                    } else
+                    {
+                        SendMessage(updateResult.ExceptionMessages.ToArray());
+                    }
                 } else
                 {
-                    SendMessage(updateResult.ExceptionMessages.ToArray());
+                    isOperationFinished = true;
+                    SendMessage("Szerkesztés megszakítva.");
                 }
-            } 
+            } while (!isOperationFinished);
         }
 
         public IEnumerable<BicycleModel> GetAll()

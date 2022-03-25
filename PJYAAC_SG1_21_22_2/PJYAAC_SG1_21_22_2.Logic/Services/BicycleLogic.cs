@@ -19,18 +19,13 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
             _bicycleRepository = bicycleRepository;
         }
 
-        private int BicycleIdWithSameModel(Bicycle entity)
+        private Bicycle BicycleWithSameModel(Bicycle entity)
         {
             var allBikes = ReadAll();
 
             var existingBike = allBikes.FirstOrDefault((bicycle) => bicycle.Model == entity.Model);
 
-            if(existingBike != null)
-            {
-                return existingBike.Id;
-            }
-
-            return 0;
+            return existingBike;
         }
 
         private void RequiredValidator(Bicycle entity, string field)
@@ -79,7 +74,7 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
         {
             ValidateFields(entity);
 
-            if (BicycleIdWithSameModel(entity) != 0)
+            if (BicycleWithSameModel(entity) != null)
             {
                 throw new Exception("A bicycle with this model already exists!");
             }
@@ -93,8 +88,8 @@ namespace PJYAAC_SG1_21_22_2.Logic.Services
         {
             ValidateFields(entity);
 
-            var bicycleId = BicycleIdWithSameModel(entity);
-            if (bicycleId != 0 && bicycleId != entity.Id)
+            var bicycle = BicycleWithSameModel(entity);
+            if (bicycle != null && bicycle.Id != entity.Id)
             {
                 throw new Exception("A bicycle with this model already exists!");
             }

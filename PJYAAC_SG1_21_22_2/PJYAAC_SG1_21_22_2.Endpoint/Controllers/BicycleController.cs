@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using PJYAAC_SG1_21_22_2.Logic.Interfaces;
+using PJYAAC_SG1_21_22_2.Models.DTOs;
 using PJYAAC_SG1_21_22_2.Models.Entities;
 using PJYAAC_SG1_21_22_2.Models.Models;
 
@@ -36,13 +37,23 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
         // POST api/Bicycle/Create
         [HttpPost]
         [ActionName("Create")]
-        public ApiResult Post(Bicycle bicycle)
+        public ApiResult Post(BicycleDTO bicycle)
         {
             var result = new ApiResult(true);
 
             try
             {
-                bicycleLogic.Create(bicycle);
+                bicycleLogic.Create(new Bicycle()
+                {
+                    Id = bicycle.Id,
+                    Model = bicycle.Model,
+                    Type = bicycle.Type,
+                    Color = bicycle.Color,
+                    DateOfPurchase = bicycle.DateOfPurchase,
+                    IsElectric = bicycle.IsElectric,
+                    IsFullSuspension = bicycle.IsFullSuspension,
+                    Price = bicycle.Price
+                });
             }
             catch (Exception e)
             {
@@ -56,13 +67,23 @@ namespace PJYAAC_SG1_21_22_2.Endpoint.Controllers
         // PUT api/Bicycle/Update
         [HttpPut]
         [ActionName("Update")]
-        public ApiResult Put(Bicycle bicycle)
+        public ApiResult Put(BicycleDTO bicycle)
         {
             var result = new ApiResult(true);
 
             try
             {
-                bicycleLogic.Update(bicycle);
+                bicycleLogic.Update(new Bicycle()
+                {
+                    Id = bicycle.Id,
+                    Model = bicycle.Model,
+                    Type = bicycle.Type,
+                    Color = bicycle.Color,
+                    DateOfPurchase = bicycle.DateOfPurchase,
+                    IsElectric = bicycle.IsElectric,
+                    IsFullSuspension = bicycle.IsFullSuspension,
+                    Price = bicycle.Price
+                });
             }
             catch (Exception e)
             {

@@ -4,53 +4,59 @@
 
 
 <div id="bicycle-handler-app">
-        <div class="button-container pb-3" style="text-align:center;">
-            <button class="btn btn-secondary" v-on:click="loadBicycles">Load</button>
-            <button class="btn btn-success" v-on:click="createBicycle">Create</button>
-            <button v-if="enabledBackToList" class="btn btn-secondary" v-on:click="backToList">Back to list</button>
-        </div>
-        <div id="content" style="display: flex; justify-content: center; flex-wrap: wrap;">
-            <div v-if="errors.length > 0">
-                <span v-for="msg in errors" style="color:red;font-weight:bold;">{{ msg }}</span>
-            </div>
-            <div v-if="messages.length > 0">
-                <span v-for="msg in messages" style="color:green;">{{ msg }}</span>
-            </div>
-            <template v-if="operationMode == 0">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Model</th>
-                            <th>Price</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="bicycle in bicycles">
-                            <td>{{ bicycle.id }}</td>
-                            <td>{{ bicycle.model }}</td>
-                            <td>{{ bicycle.price }}</td>
-                            <td style="width:20%;text-align:right;">
-                                <button class="btn btn-info" v-on:click="viewBicycle(bicycle)">View</button>
-                                <button class="btn btn-warning" v-on:click="editBicycle(bicycle)">Edit</button>
-                                <button class="btn btn-danger" v-on:click="deleteBicycle(bicycle)">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </template>
-            <template v-else-if="operationMode == 1">
-                <view-component v-bind:bicycle="selectedBicycle"></view-component>
-            </template>
-            <template v-else>
-                <!--Create and edit case-->
-                <editor-component v-bind:bicycle="selectedBicycle"
-                                  v-on:saved="savedSuccessfully"
-                                  v-on:cancelled="operationCancelled"></editor-component>
-            </template>
-        </div>
+    <div class="button-container pb-3"
+         style="text-align:center;">
+        <button class="btn btn-secondary"
+                v-on:click="loadBicycles">
+            Load
+        </button>
+        <button class="btn btn-success"
+                v-on:click="createBicycle">
+            Create
+        </button>
+        <button v-if="enabledBackToList" 
+        class="btn btn-secondary"
+        v-on:click="backToList">Back to list</button>
     </div>
+    <div id="content" 
+    style="display: flex; justify-content: center; flex-wrap: wrap;">
+        <span v-for="msg in errors" style="color:red;font-weight:bold;">{{ msg }}</span>
+        <span v-for="msg in messages" style="color:green;">{{ msg }}</span>
+        <template v-if="operationMode === 0">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Model</th>
+                        <th>Price</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="bicycle in bicycles">
+                        <td>{{ bicycle.id }}</td>
+                        <td>{{ bicycle.model }}</td>
+                        <td>{{ bicycle.price }}</td>
+                        <td style="width:20%;text-align:right;">
+                            <button class="btn btn-info" v-on:click="viewBicycle(bicycle)">View</button>
+                            <button class="btn btn-warning" v-on:click="editBicycle(bicycle)">Edit</button>
+                            <button class="btn btn-danger" v-on:click="deleteBicycle(bicycle)">Delete</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </template>
+        <template v-else-if="operationMode === 1">
+            <view-component v-bind:bicycle="selectedBicycle"></view-component>
+        </template>
+        <template v-else>
+            <!--Create and edit case-->
+            <editor-component v-bind:bicycle="selectedBicycle"
+                              v-on:saved="savedSuccessfully"
+                              v-on:cancelled="operationCancelled"></editor-component>
+        </template>
+    </div>
+</div>
 
 
 <script src="~/lib/vue/dist/vue.js"></script>
@@ -72,54 +78,55 @@
         },
         computed: {
             enabledBackToList() {
-                return this.operationMode != 0;
+                return this.operationMode !== 0;
             }
         },
         methods: {
-            loadBicycles() {
-                axi.get('GetAll').then((response) => {
-                    this.bicycles = response.data;
-                    console.log(response.data);
-                }).catch((err) => {
-                    console.log(err);
-                });
+            async loadBicycles() {
+                try {
+                    this.bicycles = (await axi.get('GetAll'))?.data;
+                } catch (error) {
+                    console.error(err);
+                }
             },
-            viewBicycle: function (bicycle) {
+            viewBicycle(bicycle) {
                 this.selectedBicycle = bicycle;
                 this.operationMode = 1;
             },
-            createBicycle: function () {
+            createBicycle() {
                 this.operationMode = 2;
             },
-            editBicycle: function (bicycle) {
+            editBicycle(bicycle) {
                 this.selectedBicycle = bicycle;
                 this.operationMode = 3;
             },
-            deleteBicycle: function (bicycle) {
-                axi.delete('Delete/' + bicycle.id).then((response) => { // Request body should not works there
-                    if (response.data.isSuccess) {
-                        this.messages.push("Bicycle deleted successfully");
-                        this.loadBicycles();
+            async deleteBicycle(bicycle) {
+                try {
+                    const result = await axi.delete(`/Delete/${bicycle.id}`);
 
-                        setTimeout(() => { this.messages = []; }, 3000);
+                    if(result.data.isSuccess) {
+                        this.messages.push("Bicycle deleted successfully");
+                        await this.loadBicycles();
                     } else {
-                        this.erros = response.data.messages;
-                        setTimeout(() => { this.errors = []; }, 3000);
+                         this.erros = result.data.messages;
                     }
-                }).catch((err) => {
+                } catch(error) {
+                    console.error(error);
                     this.errors.push('Error occured during delete.');
+                } finally {
                     setTimeout(() => { this.errors = []; }, 3000);
-                });
+                }
             },
-            backToList: function () {
+            backToList() {
                 this.selectedBicycle = {};
                 this.operationMode = 0;
             },
-            savedSuccessfully(msg) {
+            async savedSuccessfully(msg) {
                 this.selectedBicycle = {};
                 this.messages.push(msg);
-                console.log("saved");
-                this.loadBicycles();
+
+                await this.loadBicycles();
+
                 this.operationMode = 0;
 
                 setTimeout(() => { this.messages = []; }, 3000);
@@ -128,7 +135,6 @@
                 this.selectedBicycle = {};
                 this.messages.push("The operation has been cancelled.");
 
-                console.warn("cancelled");
                 this.operationMode = 0;
                 setTimeout(() => { this.messages = []; }, 3000);
             }
@@ -148,21 +154,18 @@
                 innerBicycle: {},
                 isEdit: false,
                 errors: []
-            };
+            }
         },
         methods: {
-            save() {
-                if (this.isEdit) {
-                    axi.put('Update', this.innerBicycle).then(this.handleSuccess).catch((err) => {
-                        console.log(err);
-                        this.handleError(['Error occured during processing.']);
-                    });
-                }
-                else {
-                    axi.post('Create', this.innerBicycle).then(this.handleSuccess).catch((err) => {
-                        console.log(err);
-                        this.handleError(['Error occured during processing.']);
-                    });
+            async save() {
+                const path = this.isEdit ? 'Update' : 'Create';
+                
+                try {
+                    const response = await axi.put(path, this.innerBicycle);
+                    this.handleSuccess(response);
+                } catch(error) {
+                    console.error(error);
+                    this.handleError(['Error occured during processing.']);
                 }
             },
             cancel() {
@@ -181,8 +184,8 @@
                 setTimeout(() => { this.errors = []; }, 3000); // Auto error clean after 3sec
             }
         },
-         created: function () {
-            if (this.bicycle.id != undefined) {
+         created() {
+            if (this.bicycle.id) {
                 this.isEdit = true;
 
                 // Copy

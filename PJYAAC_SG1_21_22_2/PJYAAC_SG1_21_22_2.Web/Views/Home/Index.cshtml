@@ -198,8 +198,6 @@
         },
         methods: {
             async save() {
-                const path = this.isEdit ? 'Update' : 'Create';
-
                 try {
                     const response = this.isEdit ? await axi.put('Update', this.innerBicycle) : await axi.post('Create', this.innerBicycle);
                     this.handleSuccess(response);

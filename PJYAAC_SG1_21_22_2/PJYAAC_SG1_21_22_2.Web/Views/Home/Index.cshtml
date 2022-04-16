@@ -6,10 +6,12 @@
 <div id="bicycle-handler-app">
     <div class="button-container mb-3">
         <button class="btn btn-secondary"
+                v-if="operationMode === 0"
                 v-on:click="loadBicycles">
             Load
         </button>
         <button class="btn btn-success"
+                v-if="operationMode !== 2"
                 v-on:click="createBicycle">
             Create
         </button>
@@ -84,7 +86,7 @@
         methods: {
             async loadBicycles() {
                 try {
-                    this.bicycles = (await axi.get('GetAll'))?.data;
+                    this.bicycles = (await axi.get('GetAll')).data;
                 } catch (error) {
                     console.error(err);
                 }
@@ -95,6 +97,8 @@
             },
             createBicycle() {
                 this.operationMode = 2;
+
+                this.selectedBicycle = {};
             },
             editBicycle(bicycle) {
                 this.selectedBicycle = bicycle;
@@ -108,7 +112,7 @@
                         this.messages.push("Bicycle deleted successfully");
                         await this.loadBicycles();
                     } else {
-                         this.erros = result.data.messages;
+                         this.errors = result.data.exceptionMessages;
                     }
                 } catch(error) {
                     console.error(error);
@@ -159,9 +163,9 @@
         methods: {
             async save() {
                 const path = this.isEdit ? 'Update' : 'Create';
-                
+
                 try {
-                    const response = await axi.put(path, this.innerBicycle);
+                    const response = this.isEdit ? await axi.put('Update', this.innerBicycle) : await axi.post('Create', this.innerBicycle);
                     this.handleSuccess(response);
                 } catch(error) {
                     console.error(error);
@@ -175,7 +179,7 @@
                 if (response.data.isSuccess) {
                     this.$emit('saved', this.isEdit ? "Bicycle edited successfully" : "Bicycle created successfully");
                 } else {
-                    this.handleError(response.data.messages);
+                    this.handleError(response.data.exceptionMessages);
                 }
             },
             handleError(errorMessages) {
@@ -189,14 +193,20 @@
                 this.isEdit = true;
 
                 // Copy
-                this.innerBicycle = {
-                    id: this.bicycle.id,
-                    model: this.bicycle.model,
-                    price: this.bicycle.price
-                };
+                this.innerBicycle = {... this.bicycle};
             } else {
                 // Create new
                 this.innerBicycle = {
+                    id: 0,
+                    model: '',
+                    price: 0
+                };
+            }
+        },
+        watch: {
+            bicycle: function() {
+                 this.isEdit = false;
+                 this.innerBicycle = {
                     id: 0,
                     model: '',
                     price: 0

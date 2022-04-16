@@ -1,9 +1,4 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
-
-
-<div id="bicycle-handler-app">
+﻿<div id="bicycle-handler-app">
     <div class="button-container mb-3">
         <button class="btn btn-secondary"
                 v-if="operationMode === 0"
@@ -76,6 +71,11 @@
                             <button class="btn btn-info" v-on:click="viewBicycle(bicycle)">View</button>
                             <button class="btn btn-warning" v-on:click="editBicycle(bicycle)">Edit</button>
                             <button class="btn btn-danger" v-on:click="deleteBicycle(bicycle)">Delete</button>
+                        </td>
+                    </tr>
+                    <tr v-if="!bicycles.length">
+                        <td colspan="8">
+                            No entries found.
                         </td>
                     </tr>
                 </tbody>

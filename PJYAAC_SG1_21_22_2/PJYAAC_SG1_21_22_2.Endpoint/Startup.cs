@@ -36,6 +36,7 @@ namespace PJYAAC_SG1_21_22_2.Endpoint
             services.AddScoped<IBicycleRepository, BicycleRepository>();
             services.AddScoped<IBicycleLogic, BicycleLogic>();
 
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -46,7 +47,8 @@ namespace PJYAAC_SG1_21_22_2.Endpoint
                 app.UseDeveloperExceptionPage();
             }
 
-            
+            app.UseCors(x => x.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials());
+
             app.UseRouting();
 
             app.UseAuthorization();

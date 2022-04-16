@@ -266,6 +266,7 @@
         id="view-template">
     <div class="card">
       <div class="card-body">
+        <h5 class="card-title">Detail view</h5>
         <dl>
             <dt>Id</dt>
             <dd>
@@ -315,6 +316,7 @@
         id="editor-template">
      <div class="card">
       <div class="card-body">
+        <h5 class="card-title">{{ isEdit ? 'Edit' : 'Create'}}</h5>
         <span v-for="msg in errors"
               class="alert alert-danger">
                 {{ msg }}

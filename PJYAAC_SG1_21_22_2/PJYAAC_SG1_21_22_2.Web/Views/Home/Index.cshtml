@@ -1,0 +1,365 @@
+﻿<div id="bicycle-handler-app">
+    <div class="button-container mb-3">
+        <button class="btn btn-secondary"
+                v-if="operationMode === 0"
+                v-on:click="loadBicycles">
+            Load
+        </button>
+        <button class="btn btn-success"
+                v-if="operationMode !== 2"
+                v-on:click="createBicycle">
+            Create
+        </button>
+        <button v-if="enabledBackToList" 
+        class="btn btn-secondary"
+        v-on:click="backToList">Back to list</button>
+    </div>
+    <span v-for="msg in errors" class="alert alert-danger">{{ msg }}<br /></span>
+    
+    <span v-for="msg in messages" class="alert alert-success">{{ msg }}<br /></span>
+    
+    <template v-if="operationMode === 0">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Model</th>
+                        <th>Color</th>
+                        <th>Price</th>
+                        <th>Date of purchase</th>
+                        <th>isElectric</th>
+                        <th>isFullSuspension</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="bicycle in bicycles">
+                        <td>
+                            <span>
+                                {{ bicycle.type }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ bicycle.model }}
+                            </span>   
+                        </td>
+                        <td>
+                            <span>
+                                {{ bicycle.color }}
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ bicycle.price }}Ft
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                {{ bicycle.dateOfPurchase }}
+                            </span>
+                        </td>
+                        <td>
+                            <input type="checkbox" v-model="bicycle.isElectric" disabled />
+                        </td>
+                        <td>
+                            <input type="checkbox" v-model="bicycle.isFullSuspension" disabled />
+                        </td>
+
+                        <td class="float-right">
+                            <button class="btn btn-info" v-on:click="viewBicycle(bicycle)">View</button>
+                            <button class="btn btn-warning" v-on:click="editBicycle(bicycle)">Edit</button>
+                            <button class="btn btn-danger" v-on:click="deleteBicycle(bicycle)">Delete</button>
+                        </td>
+                    </tr>
+                    <tr v-if="!bicycles.length">
+                        <td colspan="8">
+                            No entries found.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </template>
+    <template v-else-if="operationMode === 1">
+        <view-component v-bind:bicycle="selectedBicycle"></view-component>
+    </template>
+    <template v-else>
+        <!--Create and edit case-->
+        <editor-component v-bind:bicycle="selectedBicycle"
+                            v-on:saved="savedSuccessfully"
+                            v-on:cancelled="operationCancelled"></editor-component>
+    </template>
+</div>
+
+
+<script src="~/lib/vue/dist/vue.js"></script>
+<script src="~/lib/axios/dist/axios.js"></script>
+
+<script type="text/javascript">
+    const axi = axios.create({
+        baseURL: 'http://localhost:56411/api/bicycle/'
+    });
+
+    var bicycleHandlerApp = new Vue({
+        el: '#bicycle-handler-app',
+        data: {
+            bicycles: [],
+            selectedBicycle: {},
+            operationMode: 0, // 0 listing, 1 view, 2 create, 3 edit
+            messages: [],
+            errors: []
+        },
+        computed: {
+            enabledBackToList() {
+                return this.operationMode !== 0;
+            }
+        },
+        methods: {
+            async loadBicycles() {
+                try {
+                    this.bicycles = (await axi.get('GetAll')).data;
+                } catch (error) {
+                    console.error(err);
+                }
+            },
+            viewBicycle(bicycle) {
+                this.selectedBicycle = bicycle;
+                this.operationMode = 1;
+            },
+            createBicycle() {
+                this.operationMode = 2;
+
+                this.selectedBicycle = {};
+            },
+            editBicycle(bicycle) {
+                this.selectedBicycle = bicycle;
+                this.operationMode = 3;
+            },
+            async deleteBicycle(bicycle) {
+                try {
+                    const result = await axi.delete(`/Delete/${bicycle.id}`);
+
+                    if(result.data.isSuccess) {
+                        this.messages.push("Bicycle deleted successfully");
+                        await this.loadBicycles();
+                    } else {
+                         this.errors = result.data.exceptionMessages;
+                    }
+                } catch(error) {
+                    console.error(error);
+                    this.errors.push('Error occured during delete.');
+                } finally {
+                    setTimeout(() => { 
+                        this.errors = []; 
+                        this.messages = [];
+                    }, 3000);
+                }
+            },
+            backToList() {
+                this.selectedBicycle = {};
+                this.operationMode = 0;
+            },
+            async savedSuccessfully(msg) {
+                this.selectedBicycle = {};
+                this.messages.push(msg);
+
+                await this.loadBicycles();
+
+                this.operationMode = 0;
+
+                setTimeout(() => { this.messages = []; }, 3000);
+            },
+            operationCancelled() {
+                this.selectedBicycle = {};
+                this.messages.push("The operation has been cancelled.");
+
+                this.operationMode = 0;
+                setTimeout(() => { this.messages = []; }, 3000);
+            }
+        }
+    });
+
+    Vue.component('view-component', {
+        props: ['bicycle'],
+        template: '#view-template'
+    });
+
+    Vue.component('editor-component', {
+        props: ['bicycle'],
+        template: '#editor-template',
+        data: function () {
+            return {
+                innerBicycle: {},
+                isEdit: false,
+                errors: []
+            }
+        },
+        methods: {
+            async save() {
+                try {
+                    const response = this.isEdit ? await axi.put('Update', this.innerBicycle) : await axi.post('Create', this.innerBicycle);
+                    this.handleSuccess(response);
+                } catch(error) {
+                    console.error(error);
+                    this.handleError(['Error occured during processing.']);
+                }
+            },
+            cancel() {
+                this.$emit('cancelled');
+            },
+            handleSuccess(response) {
+                if (response.data.isSuccess) {
+                    this.$emit('saved', this.isEdit ? "Bicycle edited successfully" : "Bicycle created successfully");
+                } else {
+                    this.handleError(response.data.exceptionMessages);
+                }
+            },
+            handleError(errorMessages) {
+                this.errors = errorMessages;
+
+                setTimeout(() => { this.errors = []; }, 3000); // Auto error clean after 3sec
+            }
+        },
+         created() {
+            if (this.bicycle.id) {
+                this.isEdit = true;
+
+                // Copy
+                this.innerBicycle = {... this.bicycle};
+            } else {
+                // Create new
+                this.innerBicycle = {
+                    id: 0,
+                    model: '',
+                    price: 0,
+                    color: '',
+                    dateOfPurchase: new Date(),
+                    isElectric: false,
+                    isFullSuspension: false,
+                    type: ''
+                };
+            }
+        },
+        watch: {
+            bicycle: function() {
+                 this.isEdit = false;
+                 this.innerBicycle = {
+                    id: 0,
+                    model: '',
+                    price: 0,
+                    color: '',
+                    dateOfPurchase: new Date(),
+                    isElectric: false,
+                    isFullSuspension: false,
+                    type: ''
+                };
+            }
+        }
+    });
+</script>
+
+<script type="text/x-template"
+        id="view-template">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Detail view</h5>
+        <dl>
+            <dt>Id</dt>
+            <dd>
+                {{ bicycle.id }}
+            </dd>
+
+            <dt>Type</dt>
+            <dd>
+                {{ bicycle.type }}
+            </dd>
+
+            <dt>Model</dt>
+            <dd>
+                {{ bicycle.model }}
+            </dd>
+
+            <dt>Color</dt>
+            <dd>
+                {{ bicycle.color }}
+            </dd>
+
+            <dt>Price</dt>
+            <dd>
+                {{ bicycle.price }}Ft
+            </dd>
+
+            <dt>Date of purchase</dt>
+            <dd>
+                {{ bicycle.dateOfPurchase }}
+            </dd>
+
+            <dt>isElectric</dt>
+            <dd>
+                 <input type="checkbox" v-model="bicycle.isElectric" disabled />
+            </dd>
+
+            <dt>isFullSuspension</dt>
+            <dd>
+                <input type="checkbox" v-model="bicycle.isFullSuspension" disabled />
+            </dd>
+        </dl>
+      </div>
+    </div>
+</script>
+
+<script type="text/x-template"
+        id="editor-template">
+     <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ isEdit ? 'Edit' : 'Create'}}</h5>
+        <span v-for="msg in errors"
+              class="alert alert-danger">
+                {{ msg }}
+        </span>
+        <dl>
+            <dt>Type</dt>
+            <dd>
+                <input v-model="innerBicycle.type" class="form-control" />
+            </dd>
+
+            <dt>Model</dt>
+            <dd>
+                <input v-model="innerBicycle.model" class="form-control" />
+            </dd>
+
+            <dt>Color</dt>
+            <dd>
+                <input v-model="innerBicycle.color" class="form-control" />
+            </dd>
+
+            <dt>Price</dt>
+            <dd>
+                <input type="number" v-model="innerBicycle.price" class="form-control" />
+            </dd>
+
+            <dt>Date of purchase</dt>
+            <dd>
+                <input type="datetime-local" v-model="innerBicycle.dateOfPurchase" class="form-control" />
+            </dd>
+
+            <dt>isElectric</dt>
+            <dd>
+                 <input type="checkbox" v-model="innerBicycle.isElectric" />
+            </dd>
+
+            <dt>isFullSuspension</dt>
+            <dd>
+                <input type="checkbox" v-model="innerBicycle.isFullSuspension" />
+            </dd>
+        </dl>
+
+        <div class="btn-group">
+            <button class="btn btn-primary" v-on:click="save">Mentés</button>
+            <button class="btn btn-secondary" v-on:click="cancel">Mégsem</button>
+        </div>
+      </div>
+    </div>
+</script>

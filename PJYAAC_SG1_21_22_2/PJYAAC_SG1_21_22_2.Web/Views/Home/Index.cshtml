@@ -119,7 +119,12 @@
         methods: {
             async loadBicycles() {
                 try {
-                    this.bicycles = (await axi.get('GetAll')).data;
+                    this.bicycles = (await axi.get('GetAll')).data.map(b => 
+                        ({ 
+                            ... b
+                            , dateOfPurchase: b.dateOfPurchase.split('T')[0]
+                        })
+                    );
                 } catch (error) {
                     console.error(err);
                 }
@@ -235,7 +240,7 @@
                     model: '',
                     price: 0,
                     color: '',
-                    dateOfPurchase: new Date(),
+                    dateOfPurchase: '',
                     isElectric: false,
                     isFullSuspension: false,
                     type: ''
@@ -250,7 +255,7 @@
                     model: '',
                     price: 0,
                     color: '',
-                    dateOfPurchase: new Date(),
+                    dateOfPurchase: '',
                     isElectric: false,
                     isFullSuspension: false,
                     type: ''
@@ -342,7 +347,7 @@
 
             <dt>Date of purchase</dt>
             <dd>
-                <input type="datetime-local" v-model="innerBicycle.dateOfPurchase" class="form-control" />
+                <input type="date" v-model="innerBicycle.dateOfPurchase" class="form-control" />
             </dd>
 
             <dt>isElectric</dt>
